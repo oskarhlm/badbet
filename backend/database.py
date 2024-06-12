@@ -2,7 +2,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, DateTime
 
 PGHOST = os.getenv('PGHOST')
 PGUSER = os.getenv('PGUSER')
@@ -30,6 +30,17 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
+
+
+class Match(Base):
+    __tablename__ = 'matches'
+
+    id = Column(Integer, primary_key=True, index=True)
+    home_team = Column(String, nullable=True)
+    away_team = Column(String, nullable=True)
+    score = Column(String, nullable=True)
+    match_date = Column(DateTime, nullable=False)
+    tournament_stage = Column(String, nullable=False)
 
 
 Base.metadata.create_all(bind=engine)
