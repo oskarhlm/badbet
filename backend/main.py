@@ -1,4 +1,5 @@
 from typing import Union
+import os
 
 from fastapi import FastAPI
 
@@ -7,7 +8,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"Hello": "Dude"}
+    return {"Hello": os.getenv('PGHOST')}
 
 
 @app.get("/items/{item_id}")
