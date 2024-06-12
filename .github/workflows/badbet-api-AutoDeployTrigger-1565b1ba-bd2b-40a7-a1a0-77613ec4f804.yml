@@ -4,19 +4,18 @@ name: Trigger auto deployment for badbet-api
 on:
   # Automatically trigger it when detected changes in repo
   push:
-    branches: 
-      [ main ]
+    branches: [main]
     paths:
-    - 'backend/**'
-    - '.github/workflows/badbet-api-AutoDeployTrigger-1565b1ba-bd2b-40a7-a1a0-77613ec4f804.yml'
+      - 'backend/**'
+      - '.github/workflows/badbet-api-AutoDeployTrigger-1565b1ba-bd2b-40a7-a1a0-77613ec4f804.yml'
 
-  # Allow manual trigger 
-  workflow_dispatch:      
+  # Allow manual trigger
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions: 
+    permissions:
       id-token: write #This is required for requesting the OIDC JWT Token
       contents: read #Required when GH token is used to authenticate with private repo
 
@@ -34,14 +33,12 @@ jobs:
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
-          appSourcePath: ${{ github.workspace }}/backend 
+          appSourcePath: ${{ github.workspace }}/backend
           registryUrl: badbetacr.azurecr.io
           registryUsername: ${{ secrets.BADBETAPI_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.BADBETAPI_REGISTRY_PASSWORD }}
           containerAppName: badbet-api
           resourceGroup: koholm-rg
-          imageToBuild: badbetacr.azurecr.io/badbet-api:${{ github.sha }}
+          imageToBuild: badbetacr.azurecr.io/badbet-api:latest
           _buildArgumentsKey_: |
             _buildArgumentsValues_
-
-
